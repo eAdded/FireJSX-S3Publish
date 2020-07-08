@@ -23,7 +23,7 @@ export default <Plugin>function ({postExport}, {config: {custom, paths}, args, c
 
         //check if bucket was given
         if (typeof Bucket !== "string")
-            throw new Error(`[S3Publish] Expected String got ${typeof Bucket} for Bucket. Check you S3Publish config`)
+            throw new Error(`[S3Publish] Expected String got ${typeof Bucket} for Bucket. Check your S3Publish config`)
 
         //init s3
         const s3 = new S3(Aws);
