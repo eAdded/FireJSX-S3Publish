@@ -1,0 +1,19 @@
+{
+  "name": "@firejsx/awsexport",
+  "description": "Simple, small FireJSX plugin, which puts exported files from FireJSX to a S3 Bucket",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/node": "^14.0.19",
+    "firejsx": "^0.7.5"
+  },
+  "repository": {
+    "url": "https://github.com/eAdded/FireJSX-S3Publish.git"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.711.0",
+    "mime": "^2.4.6"
+  }
+}
