@@ -54,7 +54,7 @@ Make sure to read **Contribution Guidelines** at [CONTRIBUTING.md](CONTRIBUTING.
 
 Copyright (C) 2020 Aniket Prajapati
 
-Licensed under the [MIT](LICENSE)
+Licensed under the [MIT LICENSE](LICENSE)
 
 ## Contributors
  + [Aniket Prajapati](https://github.com/aniketfuryrocks) @ prajapati.ani306@gmail.com , [eAdded](http://www.eadded.com)
