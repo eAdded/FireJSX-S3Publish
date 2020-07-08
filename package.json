@@ -1,5 +1,5 @@
 {
-  "name": "@firejsx/awsexport",
+  "name": "@firejsx/s3publish",
   "description": "Simple, small FireJSX plugin, which puts exported files from FireJSX to a S3 Bucket",
   "version": "0.1.0",
   "main": "index.js",
