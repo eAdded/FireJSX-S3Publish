@@ -40,7 +40,7 @@ export default <Plugin>function ({postExport}, {config: {custom, paths}, args, c
                         s3.putObject({
                             Bucket,
                             //we dont want .html in html files
-                            Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`,
+                            Key: encodeURI(`${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`),
                             Body: createReadStream(path),
                             ContentType: getType(ext),
                         }, err => {
