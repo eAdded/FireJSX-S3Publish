@@ -5,6 +5,7 @@ import {Config as AWS_CONFIG} from "aws-sdk/lib/config"
 import {S3} from "aws-sdk"
 import {getType} from "mime"
 import {readDirRecursively} from "firejsx/utils/Fs"
+import S3Encode from "./S3Encode";
 
 interface Config {
     Aws: AWS_CONFIG
@@ -40,7 +41,7 @@ export default <Plugin>function ({postExport}, {config: {custom, paths}, args, c
                         s3.putObject({
                             Bucket,
                             //we dont want .html in html files
-                            Key: encodeURI(`${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`),
+                            Key: S3Encode(`${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`),
                             Body: createReadStream(path),
                             ContentType: getType(ext),
                         }, err => {
