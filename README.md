@@ -42,6 +42,8 @@ custom:
     putStaticDir: #put static dir to your s3 bucket. Defaults to true
 ```
 
+**Use plugin** [@firjsx/s3encode](https://www.npmjs.com/package/@firejsx/s3encode) **if your urls contain symbols like [?, +] etc**
+
 ## Code of conduct
 
 Code of conduct can be found at [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
