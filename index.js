@@ -5,7 +5,6 @@ const fs = require("fs");
 const aws_sdk_1 = require("aws-sdk");
 const mime_1 = require("mime");
 const Fs_1 = require("firejsx/utils/Fs");
-const S3Encode_1 = require("./S3Encode");
 exports.default = (function ({ postExport }, { config: { custom, paths }, args, cli }) {
     //work only when exported
     if (args["--export"]) {
@@ -28,7 +27,7 @@ exports.default = (function ({ postExport }, { config: { custom, paths }, args, 
                         s3.putObject({
                             Bucket,
                             //we dont want .html in html files
-                            Key: S3Encode_1.default(`${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`),
+                            Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`,
                             Body: fs_1.createReadStream(path),
                             ContentType: mime_1.getType(ext),
                         }, err => {
