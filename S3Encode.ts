@@ -1,19 +1,28 @@
-export default function (string:string):string {
-    return encodeURIComponent(string)
-        .replace(/%20/img, '+')
-        .replace(/%2F/img, '/')
-        .replace(/%25/img, '%')
-        .replace(/\"/img, "%22")
-        .replace(/\#/img, "%23")
-        .replace(/\$/img, "%24")
-        .replace(/\&/img, "%26")
-        .replace(/\'/img, "%27")
-        .replace(/\(/img, "%28")
-        .replace(/\)/img, "%29")
-        .replace(/\,/img, "%2C")
-        .replace(/\:/img, "%3A")
-        .replace(/\;/img, "%3B")
-        .replace(/\=/img, "%3D")
-        .replace(/\?/img, "%3F")
-        .replace(/\@/img, "%40");
+const encodings = {
+    '\+': "%2B",
+    '\!': "%21",
+    '\"': "%22",
+    '\#': "%23",
+    '\$': "%24",
+    '\&': "%26",
+    '\'': "%27",
+    '\(': "%28",
+    '\)': "%29",
+    '\*': "%2A",
+    '\,': "%2C",
+    '\:': "%3A",
+    '\;': "%3B",
+    '\=': "%3D",
+    '\?': "%3F",
+    '\@': "%40",
+};
+
+export default function (filename: string): string {
+    return encodeURI(filename) // Do the standard url encoding
+        .replace(
+            /([+!"#$&'()*+,:;=?@])/img,
+            function (match) {
+                return encodings[match];
+            }
+        );
 }
