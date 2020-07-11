@@ -41,8 +41,7 @@ custom:
     Bucket: #enter Name of your s3 bucket. Required
     putStaticDir: #put static dir to your s3 bucket. Defaults to true
 ```
-
-**Use plugin** [@firjsx/s3encode](https://www.npmjs.com/package/@firejsx/s3encode) **if your urls contain symbols like [?, +] etc**
+**Consider using lib** [s3encode](https://www.npmjs.com/package/s3encode) **if your urls contains symbols like [?]**
 
 ## Code of conduct
 
