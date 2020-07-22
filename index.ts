@@ -1,10 +1,10 @@
-import {Plugin} from "firejsx/types/Plugin"
 import {createReadStream} from "fs"
 import * as fs from "fs"
 import {Config as AWS_CONFIG} from "aws-sdk/lib/config"
 import {S3} from "aws-sdk"
 import {getType} from "mime"
 import {readDirRecursively} from "firejsx/utils/Fs"
+import {Plugin} from "firejsx/types/Plugin";
 
 interface Config {
     Aws: AWS_CONFIG
@@ -15,7 +15,7 @@ interface Config {
     }
 }
 
-export default <Plugin>function ({postExport}, {config: {custom, paths}, args, cli}) {
+export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args, cli}) {
     //work only when exported
     if (args["--export"]) {
         //check config and arg
@@ -56,9 +56,9 @@ export default <Plugin>function ({postExport}, {config: {custom, paths}, args, c
                 })
             }
 
-            putObjs('', paths.dist)
-            if (paths.static && putStaticDir)
-                putObjs('static/', paths.static)
+            putObjs('', outDir)
+            if (staticDir && putStaticDir)
+                putObjs('static/', staticDir)
             await Promise.all(promises);
         })
     }

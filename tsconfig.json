@@ -8,8 +8,5 @@
       "ES2017",
       "DOM"
     ]
-  },
-  "exclude": [
-    "code/node_modules"
-  ]
+  }
 }

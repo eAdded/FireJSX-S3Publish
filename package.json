@@ -1,7 +1,7 @@
 {
   "name": "@firejsx/s3publish",
   "description": "Simple, small FireJSX plugin, which puts exported files from FireJSX to a S3 Bucket",
-  "version": "0.4.3",
+  "version": "0.5.0-alpha.1",
   "main": "index.js",
   "license": "MIT",
   "private": false,
@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@types/node": "^14.0.19",
-    "firejsx": "^0.7.5"
+    "firejsx": "^0.9.0-alpha.7"
   },
   "files": [
     "index.js"
