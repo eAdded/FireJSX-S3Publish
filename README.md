@@ -55,7 +55,7 @@ To change cacheControl, you need to create a `firejsx.js` instead of `firejsx.ym
 exports.default = {
    custom: {
         //this is the default function to determine max-age
-        CacheControl : path => path.endsWith('html') || path.endsWith('.map.js') ? 'max-age:360' : 'max-age=31536000'
+        CacheControl : path => path.endsWith('.html') || path.endsWith('.map.js') ? 'max-age:360' : 'max-age=31536000'
    }
 }
 ```

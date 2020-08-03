@@ -27,9 +27,7 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                 putStaticDir = true,
                 Bucket,
                 gzip = true,
-                CacheControl = path =>
-                    path.endsWith('html') || path.endsWith('.map.js') ? 'max-age:360' : 'max-age=31536000'
-                ,
+                CacheControl = path => path.endsWith('.html') || path.endsWith('.map.js') ? 'max-age:360' : 'max-age=31536000',
                 ...extra
             } = {}, Aws
         } = <Config>custom
