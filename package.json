@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "aws-sdk": "^2.711.0",
-    "compress": "^0.99.0",
     "mime": "^2.4.6"
   },
   "devDependencies": {

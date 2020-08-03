@@ -5,13 +5,15 @@ import {S3} from "aws-sdk"
 import {getType} from "mime"
 import {readDirRecursively} from "firejsx/utils/Fs"
 import {Plugin} from "firejsx/types/Plugin";
+import {createGzip} from "zlib"
 
 interface Config {
     Aws: AWS_CONFIG
     S3Publish: {
         Bucket: string,
         rmDist: boolean,
-        putStaticDir: boolean
+        putStaticDir: boolean,
+        gzip: boolean
     }
 }
 
@@ -19,7 +21,7 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
     //work only when exported
     if (args["--export"]) {
         //check config and arg
-        let {S3Publish: {putStaticDir = true, Bucket} = {}, Aws} = <Config>custom
+        let {S3Publish: {putStaticDir = true, Bucket, gzip = true} = {}, Aws} = <Config>custom
 
         //check if bucket was given
         if (typeof Bucket !== "string")
@@ -41,8 +43,18 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                             Bucket,
                             //we dont want .html in html files
                             Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`,
-                            Body: createReadStream(path),
                             ContentType: getType(ext),
+                            ...(() => {
+                                if (gzip)
+                                    return {
+                                        Body: createReadStream(path).pipe(createGzip()),
+                                        ContentEncoding: 'gzip'
+                                    }
+                                else
+                                    return {
+                                        Body: createReadStream(path)
+                                    }
+                            })()
                         }, err => {
                             if (err) {
                                 cli.error(`[S3Publish] ${path}`)
