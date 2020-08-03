@@ -29,7 +29,7 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                 Bucket,
                 gzip = true,
                 CacheControl = path =>
-                    path.endsWith('html') || path.endsWith('.map.js') ? 'max-age:' : 'max-age=31536000'
+                    path.endsWith('html') || path.endsWith('.map.js') ? 'max-age:360' : 'max-age=31536000'
                 ,
                 ...extra
             } = {}, Aws
