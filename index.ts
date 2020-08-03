@@ -11,7 +11,6 @@ interface Config {
     Aws: AWS_CONFIG
     S3Publish: {
         Bucket: string,
-        rmDist: boolean,
         putStaticDir: boolean,
         gzip: boolean,
         CacheControl: (string) => string
