@@ -14,6 +14,7 @@ interface Config {
         rmDist: boolean,
         putStaticDir: boolean,
         gzip: boolean,
+        CacheControl: (string) => string
         [key: string]: any
     }
 }
@@ -22,7 +23,17 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
     //work only when exported
     if (args["--export"]) {
         //check config and arg
-        let {S3Publish: {putStaticDir = true, Bucket, gzip = true, ...extra} = {}, Aws} = <Config>custom
+        let {
+            S3Publish: {
+                putStaticDir = true,
+                Bucket,
+                gzip = true,
+                CacheControl = path =>
+                    path.endsWith('html') || path.endsWith('.map.js') ? 'max-age:' : 'max-age=31536000'
+                ,
+                ...extra
+            } = {}, Aws
+        } = <Config>custom
 
         //check if bucket was given
         if (typeof Bucket !== "string")
@@ -41,6 +52,7 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                     const ext = Key.substring(dot);
                     promises.push(new Promise((resolve, reject) => {
                         s3.putObject({
+                                ...extra,
                                 Bucket,
                                 //we dont want .html in html files
                                 Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`,
@@ -56,7 +68,7 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                                             Body: createReadStream(path)
                                         }
                                 })(),
-                                ...extra
+                                CacheControl: CacheControl(path)
                             }, err => {
                                 if (err) {
                                     cli.error(`[S3Publish] ${path}`)
