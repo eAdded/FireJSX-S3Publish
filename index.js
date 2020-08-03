@@ -21,7 +21,7 @@ exports.default = (function ({ postExport }, { custom, staticDir, outDir, args, 
     //work only when exported
     if (args["--export"]) {
         //check config and arg
-        let _a = custom, _b = _a.S3Publish, _c = _b === void 0 ? {} : _b, { putStaticDir = true, Bucket, gzip = true, CacheControl = path => path.endsWith('html') || path.endsWith('.map.js') ? 'max-age:' : 'max-age=31536000' } = _c, extra = __rest(_c, ["putStaticDir", "Bucket", "gzip", "CacheControl"]), { Aws } = _a;
+        let _a = custom, _b = _a.S3Publish, _c = _b === void 0 ? {} : _b, { putStaticDir = true, Bucket, gzip = true, CacheControl = path => path.endsWith('html') || path.endsWith('.map.js') ? 'max-age:360' : 'max-age=31536000' } = _c, extra = __rest(_c, ["putStaticDir", "Bucket", "gzip", "CacheControl"]), { Aws } = _a;
         //check if bucket was given
         if (typeof Bucket !== "string")
             throw new Error(`[S3Publish] Expected String got ${typeof Bucket} for Bucket. Check your S3Publish config`);
