@@ -36,28 +36,18 @@ exports.default = (function ({ postExport }, { custom, staticDir, outDir, args, 
                     const dot = Key.lastIndexOf('.') + 1;
                     const ext = Key.substring(dot);
                     promises.push(new Promise((resolve, reject) => {
-                        s3.putObject(Object.assign(Object.assign(Object.assign(Object.assign({}, extra), { Bucket, 
-                            //we dont want .html in html files
-                            Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`, ContentType: mime_1.getType(ext) }), (() => {
-                            if (gzip)
-                                return {
-                                    Body: fs_1.createReadStream(path).pipe(zlib_1.createGzip()),
-                                    ContentEncoding: 'gzip'
-                                };
-                            else
-                                return {
-                                    Body: fs_1.createReadStream(path)
-                                };
-                        })()), { CacheControl: CacheControl(path) }), err => {
-                            if (err) {
-                                cli.error(`[S3Publish] ${path}`);
-                                reject();
-                            }
-                            else {
-                                cli.ok(`[S3Publish] ${path}`);
-                                resolve();
-                            }
-                        });
+                        function putObj(err, Body) {
+                            err ?
+                                reject(err) :
+                                s3.putObject(Object.assign(Object.assign({}, extra), { Bucket, 
+                                    //we dont want .html in html files
+                                    Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`, ContentType: mime_1.getType(ext), Body, ContentEncoding: gzip ? 'gzip' : undefined, CacheControl: CacheControl(path) }), err => err ?
+                                    cli.error(`[S3Publish] ${path}`, err) && reject() :
+                                    cli.ok(`[S3Publish] ${path}`) && resolve());
+                        }
+                        fs_1.readFile(path, gzip ?
+                            (err, data) => err ? reject(err) : zlib_1.gzip(data, putObj) :
+                            putObj);
                     }));
                 });
             }

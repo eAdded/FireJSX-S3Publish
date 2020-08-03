@@ -1,11 +1,11 @@
-import {createReadStream} from "fs"
+import {readFile} from "fs"
 import * as fs from "fs"
 import {Config as AWS_CONFIG} from "aws-sdk/lib/config"
 import {S3} from "aws-sdk"
 import {getType} from "mime"
 import {readDirRecursively} from "firejsx/utils/Fs"
 import {Plugin} from "firejsx/types/Plugin";
-import {createGzip} from "zlib"
+import {gzip as GZIP} from "zlib"
 
 interface Config {
     Aws: AWS_CONFIG
@@ -51,34 +51,26 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                     const dot = Key.lastIndexOf('.') + 1;
                     const ext = Key.substring(dot);
                     promises.push(new Promise((resolve, reject) => {
-                        s3.putObject({
-                                ...extra,
-                                Bucket,
-                                //we dont want .html in html files
-                                Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`,
-                                ContentType: getType(ext),
-                                ...(() => {
-                                    if (gzip)
-                                        return {
-                                            Body: createReadStream(path).pipe(createGzip()),
-                                            ContentEncoding: 'gzip'
-                                        }
-                                    else
-                                        return {
-                                            Body: createReadStream(path)
-                                        }
-                                })(),
-                                CacheControl: CacheControl(path)
-                            }, err => {
-                                if (err) {
-                                    cli.error(`[S3Publish] ${path}`)
-                                    reject()
-                                } else {
-                                    cli.ok(`[S3Publish] ${path}`)
-                                    resolve()
-                                }
-                            }
-                        )
+                        function putObj(err, Body) {
+                            err ?
+                                reject(err) :
+                                s3.putObject({
+                                        ...extra,
+                                        Bucket,
+                                        //we dont want .html in html files
+                                        Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`,
+                                        ContentType: getType(ext),
+                                        Body,
+                                        ContentEncoding: gzip ? 'gzip' : undefined,
+                                        CacheControl: CacheControl(path)
+                                    }, err => err ?
+                                    cli.error(`[S3Publish] ${path}`, err) && reject() :
+                                    cli.ok(`[S3Publish] ${path}`) && resolve()
+                                )
+                        }
+                        readFile(path, gzip ?
+                            (err, data) => err ? reject(err) : GZIP(data, putObj) :
+                            putObj)
                     }))
                 })
             }
