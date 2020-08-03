@@ -52,8 +52,7 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                     const ext = Key.substring(dot);
                     promises.push(new Promise((resolve, reject) => {
                         function putObj(err, Body) {
-                            err ?
-                                reject(err) :
+                            err ? reject(err) :
                                 s3.putObject({
                                         ...extra,
                                         Bucket,
@@ -64,10 +63,11 @@ export default <Plugin>function ({postExport}, {custom, staticDir, outDir, args,
                                         ContentEncoding: gzip ? 'gzip' : undefined,
                                         CacheControl: CacheControl(path)
                                     }, err => err ?
-                                    cli.error(`[S3Publish] ${path}`, err) && reject() :
-                                    cli.ok(`[S3Publish] ${path}`) && resolve()
+                                    reject(void cli.error(`[S3Publish] ${path}`, err)) :
+                                    resolve(void cli.ok(`[S3Publish] ${path}`))
                                 )
                         }
+
                         readFile(path, gzip ?
                             (err, data) => err ? reject(err) : GZIP(data, putObj) :
                             putObj)

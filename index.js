@@ -37,13 +37,12 @@ exports.default = (function ({ postExport }, { custom, staticDir, outDir, args, 
                     const ext = Key.substring(dot);
                     promises.push(new Promise((resolve, reject) => {
                         function putObj(err, Body) {
-                            err ?
-                                reject(err) :
+                            err ? reject(err) :
                                 s3.putObject(Object.assign(Object.assign({}, extra), { Bucket, 
                                     //we dont want .html in html files
                                     Key: `${prefix}${ext === 'html' ? Key.substring(0, dot - 1) : Key}`, ContentType: mime_1.getType(ext), Body, ContentEncoding: gzip ? 'gzip' : undefined, CacheControl: CacheControl(path) }), err => err ?
-                                    cli.error(`[S3Publish] ${path}`, err) && reject() :
-                                    cli.ok(`[S3Publish] ${path}`) && resolve());
+                                    reject(void cli.error(`[S3Publish] ${path}`, err)) :
+                                    resolve(void cli.ok(`[S3Publish] ${path}`)));
                         }
                         fs_1.readFile(path, gzip ?
                             (err, data) => err ? reject(err) : zlib_1.gzip(data, putObj) :
